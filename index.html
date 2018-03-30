@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="App">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Simple kit</title>
-
     <link rel="stylesheet" href="build/css/app.css">
   </head>
-  <body>
-    <h1>Hello, world!</h1>
+  <body ng-controller="Main">
+    <canvas id="main"></canvas>
+    <script src="node_modules/angular/angular.min.js"></script>
     <script src="build/js/app.js"></script>
   </body>
 </html>

@@ -16,7 +16,7 @@ gulp.task('browser-sync', () => {
 gulp.task('styles', () => {
   return gulp.src("scss/**/*.scss")
   	.pipe(sourcemaps.init())
-    .pipe(sass({ outputStyle: 'compressed' }))
+    .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest("build/css"))
     .pipe(browserSync.stream());
@@ -26,7 +26,7 @@ gulp.task('styles', () => {
 gulp.task('scripts', () => {
   return gulp.src('js/**/*.js')
     .pipe(sourcemaps.init())
-    .pipe(babel({ presets: ['env'] }))
+    .pipe(babel({ presets: ['env'] }).on('error', err => { console.log(err) }))
     .pipe(concat('app.js'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('build/js'));

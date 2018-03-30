@@ -25,5 +25,8 @@
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^3.2.1",
     "gulp-sourcemaps": "^2.6.4"
+  },
+  "dependencies": {
+    "angular": "^1.6.9"
   }
 }
