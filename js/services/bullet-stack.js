@@ -1,4 +1,4 @@
-function BulletStack(Playground, SceneStack, ScreenWatcher) {
+function BulletStack(Playground, SceneStack, ScreenWatcher, Trigo) {
 	let bullets = [];
 
 	let init = () => {
@@ -7,19 +7,16 @@ function BulletStack(Playground, SceneStack, ScreenWatcher) {
 
 		SceneStack.add('update-bullets', () => {
 			bullets = bullets.map(bullet => {
-				playground.save();
+				let depression = Trigo.rotate(bullet.originY - bullet.y, bullet.degree);
+				depression.y = bullet.originY - depression.y;
+				depression.x = screen.width / 2 + depression.x;
 
-				// Bullet degree
-				playground.translate(bullet.originX, bullet.originY);
-				playground.rotate(bullet.degree * Math.PI / 180);
-
-				// Draw bullet
 				playground.beginPath();
-				playground.arc(0, -(bullet.originY - bullet.y), bullet.radius, 0, Math.PI * 2);
+				playground.fillStyle = 'orange';
+				playground.arc(depression.x, depression.y, bullet.radius, 0, Math.PI * 2);
 				playground.fill();
 				playground.closePath();
 
-				playground.restore();
 				bullet.y -= bullet.speed;
 				return bullet;
 			});
@@ -30,10 +27,11 @@ function BulletStack(Playground, SceneStack, ScreenWatcher) {
 	};
 
 	let getAll = () => bullets;
+	let set = newBullets => { bullets = newBullets };
 	let add = bullet => { bullets.push(bullet) };
 	let remove = index => { bullets.splice(index, 1) };
 
-	return { init, getAll, add, remove };
+	return { init, getAll, set, add, remove };
 }
 
 angular
