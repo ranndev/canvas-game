@@ -8,7 +8,9 @@ function Trigo() {
 		return { x: depressionX, y: depressionY };
 	};
 
-	return { rotate };
+	let randomRange = (from, to) => from + (Math.random() * (to - from));
+
+	return { rotate, randomRange };
 }
 
 angular

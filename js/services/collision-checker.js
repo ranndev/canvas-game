@@ -1,4 +1,4 @@
-function CollisionChecker(SceneStack, ScreenWatcher, BulletStack, EnemyStack, Cannon, Trigo) {
+function CollisionChecker(SceneStack, ScreenWatcher, BulletStack, EnemyStack, Trigo, SoundSystem) {
 	let getDistance = (x1, y1, x2, y2) => {
 		let xDistance = x2 - x1;
 		let yDistance = y2 - y1;
@@ -8,25 +8,26 @@ function CollisionChecker(SceneStack, ScreenWatcher, BulletStack, EnemyStack, Ca
 
 	let check = () => {
 		SceneStack.add('check-collided', () => {
-			let explode = new Audio('../assets/sounds/explode.mp3');
 			let screen =  ScreenWatcher.getScreen();
 
-			BulletStack.set(BulletStack.getAll().filter(bullet => {
-				let collided = false;
-
-				EnemyStack.set(EnemyStack.getAll().filter(enemy => {
+			EnemyStack.set(EnemyStack.getAll().filter(enemy => {
+				BulletStack.set(BulletStack.getAll().filter(bullet => {
 					let depression = Trigo.rotate(bullet.originY - bullet.y, bullet.degree);
 					depression.y = bullet.originY - depression.y;
 					depression.x = screen.width / 2 + depression.x;
 
 					let distance = getDistance(depression.x, depression.y, enemy.x, enemy.y);
-					if (!collided) collided = distance < (bullet.radius + enemy.radius);
+					if (distance < (bullet.radius + enemy.radius)) {
+						SoundSystem.play('explode');
+						enemy.health -= bullet.damage;
+						bullet = false;
+						if (enemy.health <= 0) enemy = false;
+					}
 
-					if ((distance < (bullet.radius + enemy.radius))) explode.play();
-					return !(distance < (bullet.radius + enemy.radius));
+					return bullet;
 				}));
 
-				return !collided;
+				return enemy;
 			}));
 		});
 	};
